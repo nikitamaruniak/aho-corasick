@@ -12,10 +12,22 @@ class Dictionary(object):
     ... """
     >>> list(d.matches(multiline_text)) # ignores line breaks
     [(1, 3, 1), (1, 3, 0), (2, 1, 3)]
+    >>> patterns = ['abcde', 'abc']
+    >>> d = Dictionary(patterns)
+    >>> list(d.matches('abcde'))
+    [(0, 2, 1), (0, 4, 0)]
     >>> patterns = ['she', 'she']
     >>> d = Dictionary(patterns) # if dictionary contains repetitions, use the first one
     >>> list(d.matches('ushers'))
     [(0, 3, 0)]
+    >>> patterns = ['potato', 'tat', 'tatter', 'at', 'to']
+    >>> d = Dictionary(patterns)
+    >>> list(d.matches('xxxpotatoyy'))
+    [(0, 7, 1), (0, 7, 3), (0, 8, 0), (0, 8, 4)]
+    >>> patterns = ['abcdefg', 'defgh', 'efx']
+    >>> d = Dictionary(patterns)
+    >>> list(d.matches('xxxabcdefxyyy'))
+    [(0, 9, 2)]
     '''
 
 
@@ -48,7 +60,7 @@ class Dictionary(object):
 
     def _phase1(self, patterns):
         self._edges = [None]
-        self._out = {}
+        self._term = [None]
         i = 0
         for pattern in patterns:
             u = 0
@@ -63,11 +75,14 @@ class Dictionary(object):
 
         self._fail = [0] * len(self._edges)
         self._fail[root] = -1
+        self._out = [0] * len(self._edges)
+        self._out[root] = -1
 
         q = deque()
 
         for _, v in self._edges_from(root):
             self._set_failure(v, root)
+            self._out[v] = root
             q.append(v)
 
         while len(q) > 0:
@@ -84,6 +99,7 @@ class Dictionary(object):
                     self._merge_output(fv, v)
 
                 q.append(v)
+
 
     def _insert(self, u, c):
         edges = self._edges[u]
@@ -102,8 +118,11 @@ class Dictionary(object):
 
 
     def _add_output(self, u, i):
-        if not u in self._out:
-            self._out[u] = [i]
+        n = len(self._term)
+        if u >= n:
+            self._term.extend((None for i in xrange(u + 1 - n)))
+        if self._term[u] is None:
+            self._term[u] = i
 
 
     def _edges_from(self, u):
@@ -132,18 +151,21 @@ class Dictionary(object):
 
 
     def _merge_output(self, u, v):
-        if not u in self._out:
-            return
-        if not v in self._out:
-            self._out[v] = []
-        self._out[v].extend(self._out[u])
+        if not self._term[u] is None:
+            self._out[v] = u
+        else:
+            self._out[v] = self._out[u]
 
 
     def _output(self, u):
-        if not u in self._out:
-            return []
-        else:
-            return self._out[u]
+        root = 0
+        if not self._term[u] is None:
+            yield self._term[u]
+        o = self._out[u]
+        while o != root:
+            yield self._term[o]
+            o = self._out[o]
+        
 
 if __name__ == '__main__':
     import sys
