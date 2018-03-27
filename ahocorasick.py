@@ -12,6 +12,10 @@ class Dictionary(object):
     ... """
     >>> list(d.matches(multiline_text)) # ignores line breaks
     [(1, 3, 1), (1, 3, 0), (2, 1, 3)]
+    >>> patterns = ['she', 'she']
+    >>> d = Dictionary(patterns) # if dictionary contains repetitions, use the first one
+    >>> list(d.matches('ushers'))
+    [(0, 3, 0)]
     '''
 
 
@@ -99,8 +103,7 @@ class Dictionary(object):
 
     def _add_output(self, u, i):
         if not u in self._out:
-            self._out[u] = []
-        self._out[u].append(i)
+            self._out[u] = [i]
 
 
     def _edges_from(self, u):
