@@ -1,2 +1,4 @@
 *.pyc
 benchmark/testdata
+.idea
+.python-version
