@@ -120,7 +120,7 @@ class Dictionary(object):
     def _add_output(self, u, i):
         n = len(self._term)
         if u >= n:
-            self._term.extend((None for i in xrange(u + 1 - n)))
+            self._term.extend((None for i in range(u + 1 - n)))
         if self._term[u] is None:
             self._term[u] = i
 
@@ -130,7 +130,7 @@ class Dictionary(object):
         if edges is None:
             return iter(())
         else:
-            return edges.iteritems()
+            return edges.items()
 
 
     def _set_failure(self, u, v):
