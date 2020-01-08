@@ -20,4 +20,14 @@ else
   echo "Unit tests passed."
 fi
 
+echo "Running acceptance tests..."
+acceptance_tests/acceptance_tests.sh
+if [ $? -ne 0 ]
+then
+  echo "Acceptance tests failed."
+  exit 1
+else
+  echo "Acceptance tests passed."
+fi
+
 echo "All checks passed."

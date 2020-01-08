@@ -1,0 +1,9 @@
+4:18 Rossum
+6:24 object-oriented
+9:11 dynamic
+10:38 object-oriented
+10:59 functional
+15:37 features
+16:16 system
+25:54 system
+27:-2 implementation

@@ -1,0 +1,7 @@
+system
+Rossum
+features
+object-oriented
+functional
+dynamic
+implementation

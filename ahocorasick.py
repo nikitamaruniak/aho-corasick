@@ -175,8 +175,4 @@ if __name__ == "__main__":
         d = Dictionary(patterns)
         for line, column, i in d.matches(text):
             p = patterns[i]
-            print(
-                "{}:{} {}".format(
-                    line + 1, column + 1 - len(p) + 1, codecs.encode(p, "utf-8")
-                )
-            )
+            print("{}:{} {}".format(line + 1, column + 1 - len(p) + 1, p))
