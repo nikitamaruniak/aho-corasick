@@ -61,13 +61,11 @@ class Dictionary(object):
     def _phase1(self, patterns):
         self._edges = [None]
         self._term = [None]
-        i = 0
-        for pattern in patterns:
+        for i, pattern in enumerate(patterns):
             u = 0
             for c in pattern:
                 u = self._insert(u, c)
             self._add_output(u, i)
-            i += 1
 
 
     def _phase2(self):
