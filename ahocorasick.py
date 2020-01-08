@@ -1,5 +1,6 @@
 from collections import deque
 
+
 class Dictionary(object):
     '''
     >>> patterns = ['he', 'she', 'his', 'hers']
@@ -30,11 +31,9 @@ class Dictionary(object):
     [(0, 9, 2)]
     '''
 
-
     def __init__(self, patterns):
         self._phase1(patterns)
         self._phase2()
-
 
     def matches(self, text):
         root = 0
@@ -43,7 +42,7 @@ class Dictionary(object):
         column = 0
         i = root
         for c in text:
-            if c == '\n':
+            if c == "\n":
                 line += 1
                 column = 0
                 continue
@@ -57,7 +56,6 @@ class Dictionary(object):
                     yield (line, column, o)
             column += 1
 
-
     def _phase1(self, patterns):
         self._edges = [None]
         self._term = [None]
@@ -66,7 +64,6 @@ class Dictionary(object):
             for c in pattern:
                 u = self._insert(u, c)
             self._add_output(u, i)
-
 
     def _phase2(self):
         root = 0
@@ -98,7 +95,6 @@ class Dictionary(object):
 
                 q.append(v)
 
-
     def _insert(self, u, c):
         edges = self._edges[u]
 
@@ -114,14 +110,12 @@ class Dictionary(object):
             self._edges[u][c] = newnode
             return newnode
 
-
     def _add_output(self, u, i):
         n = len(self._term)
         if u >= n:
             self._term.extend((None for i in range(u + 1 - n)))
         if self._term[u] is None:
             self._term[u] = i
-
 
     def _edges_from(self, u):
         edges = self._edges[u]
@@ -130,30 +124,24 @@ class Dictionary(object):
         else:
             return edges.items()
 
-
     def _set_failure(self, u, v):
         self._fail[u] = v
 
-
     def _failure(self, u):
         return self._fail[u]
-
 
     def _edge_exists(self, u, c):
         edges = self._edges[u]
         return not edges is None and c in edges
 
-
     def _edge_destination(self, u, c):
         return self._edges[u][c]
-
 
     def _merge_output(self, u, v):
         if not self._term[u] is None:
             self._out[v] = u
         else:
             self._out[v] = self._out[u]
-
 
     def _output(self, u):
         root = 0
@@ -163,11 +151,12 @@ class Dictionary(object):
         while o != root:
             yield self._term[o]
             o = self._out[o]
-        
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
     import codecs
+
     if len(sys.argv) != 3:
         sys.exit(1)
     else:
@@ -175,16 +164,19 @@ if __name__ == '__main__':
         text_path = sys.argv[2]
 
         patterns = []
-        with codecs.open(dict_path, 'r', 'utf-8') as f:
+        with codecs.open(dict_path, "r", "utf-8") as f:
             for pattern in f:
                 pattern = pattern.strip()
                 patterns.append(pattern)
 
-        with codecs.open(text_path, 'r', 'utf-8') as f:
+        with codecs.open(text_path, "r", "utf-8") as f:
             text = f.read()
 
         d = Dictionary(patterns)
         for line, column, i in d.matches(text):
             p = patterns[i]
-            print('{}:{} {}'.format(
-                line + 1, column + 1 - len(p) + 1, codecs.encode(p, 'utf-8')))
+            print(
+                "{}:{} {}".format(
+                    line + 1, column + 1 - len(p) + 1, codecs.encode(p, "utf-8")
+                )
+            )
