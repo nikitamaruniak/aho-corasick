@@ -173,9 +173,6 @@ if __name__ == '__main__':
     else:
         dict_path = sys.argv[1]
         text_path = sys.argv[2]
-        stats = False
-        if len(sys.argv) > 3 and sys.argv[3] == '-s':
-            stats = True
 
         patterns = []
         with codecs.open(dict_path, 'r', 'utf-8') as f:
